@@ -5,6 +5,6 @@ public enum ETAT_RECLAMATION {
 
    APPROUVE,
     REJETE,
-    A_LETUDE,
+
 
 }

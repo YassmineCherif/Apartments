@@ -1,19 +1,31 @@
-export enum UserRole {
-  ADMIN = 'ADMIN',
-  CLIENT = 'CLIENT',
-  MANAGER = 'MANAGER'
-  // ➕ add other roles from your USER_ROLE enum in backend
-}
+import { USER_ROLE } from "./USER_ROLE";
+import { Pays } from "./Pays";
+import { Reservation } from "./Reservation";
+import { ETAT_RECLAMATION } from "./ETAT_RECLAMATION";
+import { Chat } from "./Chat";
+import { Reclamation } from "./Reclamation";
+
+
+
+
+
 
 export interface User {
   id_user?: number;
-
   nom: string;
   prenom: string;
   email: string;
+  cin: string;
+  approved: boolean;
+  numerotelephone: string;
+  user_role: USER_ROLE;
   adresse: string;
-  numeroTelephone: string;
-
-  user_role: UserRole;
-
+  login: string;
+  mdp: string;
+  actif: boolean;
+  derniercnx: string;
+  pays?: Pays[];
+  reservations?: Reservation[];
+  chats?: Chat[];
+  reclamations?: Reclamation[];
 }

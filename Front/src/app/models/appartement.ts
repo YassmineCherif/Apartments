@@ -1,5 +1,5 @@
 export interface Appartement {
-  id_app?: number;   // optional because backend generates it
+  id_app?: number; 
   titre: string;
   description: string;
 }

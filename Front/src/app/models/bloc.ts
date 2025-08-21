@@ -1,5 +1,8 @@
+import { Appartement } from "./appartement";
+
 export interface Bloc {
   id_bloc?: number;
   nom: string;
-nombreEtage: number;
+  nombreEtages: number;
+  appartement?: Appartement;
 }
