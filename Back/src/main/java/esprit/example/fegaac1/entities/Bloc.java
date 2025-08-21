@@ -21,8 +21,8 @@ public class Bloc {
     private int nombreEtages;
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Appartement appartement;
+    @OneToMany
+    private Set<Appartement> appartement;
 
 
 

@@ -19,7 +19,7 @@ public class Reservation {
     private LocalDate dateFin;
     private boolean approved ;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     Appartement  appartements;
 
 

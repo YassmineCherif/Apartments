@@ -19,7 +19,7 @@ public class Residence {
     private int nombrebloc;
 
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     private Set<Bloc> blocs;
 
 }

@@ -15,5 +15,8 @@ public class Appartement {
     private String titre;
     private String description;
 
+
+
+
 }
 

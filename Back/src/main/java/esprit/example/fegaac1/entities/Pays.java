@@ -20,7 +20,7 @@ public class Pays {
     private String adress;
     private String ville;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     private Set<Residence> residences;
 
 
