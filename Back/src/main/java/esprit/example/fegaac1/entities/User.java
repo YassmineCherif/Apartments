@@ -6,8 +6,7 @@ import lombok.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "app_user")  // ✅ FIX: avoids conflict with SQL Server reserved word
-@Data
+ @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
