@@ -4,4 +4,5 @@ export interface Residence {
   nom: string;
   nombrebloc: number;
   blocs?: Bloc[];
+  id_pays?: number;
 }

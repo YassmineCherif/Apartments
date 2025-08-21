@@ -22,4 +22,6 @@ public class Residence {
     @OneToMany
     private Set<Bloc> blocs;
 
+    private Long id_pays ;
+
 }

@@ -1,71 +1,109 @@
-// src/app/services/appartement.service.ts
-
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';    
-import { Appartement } from 'src/app/models/appartement';
-import { Bloc } from 'src/app/models/bloc';
- // create this later
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppartementService {
 
-private baseUrl = 'http://localhost:8089/fegaac1/appartements';
-  // ✅ matches @RequestMapping("/appartements")
+  private baseUrl = 'http://localhost:8089/appartement'; 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  // Add new appartement
-  addAppartement(appartement: Appartement): Observable<Appartement> {
-    return this.http.post<Appartement>(`${this.baseUrl}`, appartement)
-      .pipe(catchError(this.handleError));
+  // ===================== PAYS =====================
+  getAllPays(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/pays`);
   }
 
-  // Get all appartements
-  getAllAppartements(): Observable<Appartement[]> {
-    return this.http.get<Appartement[]>(`${this.baseUrl}`)
-      .pipe(catchError(this.handleError));
+  getPaysById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/pays/${id}`);
   }
 
-  // Get appartement by ID
-  getAppartementById(id: number): Observable<Appartement> {
-    return this.http.get<Appartement>(`${this.baseUrl}/${id}`)
-      .pipe(catchError(this.handleError));
+  addPays(pays: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/pays`, pays);
   }
 
-  // Update appartement
-  updateAppartement(appartement: Appartement): Observable<Appartement> {
-    return this.http.put<Appartement>(`${this.baseUrl}`, appartement)
-      .pipe(catchError(this.handleError));
+  updatePays(pays: any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/pays`, pays);
   }
 
-  // Delete appartement
+  deletePays(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/pays/${id}`);
+  }
+
+  // ===================== RESIDENCE =====================
+  getAllResidences(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/residences`);
+  }
+
+  getResidenceById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/residences/${id}`);
+  }
+
+  getResidencesByPays(paysId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/residences/byPays/${paysId}`);
+  }
+
+  addResidence(residence: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/residences`, residence);
+  }
+
+  updateResidence(residence: any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/residences`, residence);
+  }
+
+  deleteResidence(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/residences/${id}`);
+  }
+
+  // ===================== BLOC =====================
+  getAllBlocs(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/blocs`);
+  }
+
+  getBlocById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/blocs/${id}`);
+  }
+
+  getBlocsByResidence(residenceId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/blocs/byResidence/${residenceId}`);
+  }
+
+  addBloc(bloc: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/blocs`, bloc);
+  }
+
+  updateBloc(bloc: any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/blocs`, bloc);
+  }
+
+  deleteBloc(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/blocs/${id}`);
+  }
+
+  // ===================== APPARTEMENT =====================
+  getAllAppartements(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/appartements`);
+  }
+
+  getAppartementById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/appartements/${id}`);
+  }
+
+  getAppartementsByBloc(blocId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/appartements/byBloc/${blocId}`);
+  }
+
+  addAppartement(appartement: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/appartements`, appartement);
+  }
+
+  updateAppartement(appartement: any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/appartements`, appartement);
+  }
+
   deleteAppartement(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`)
-      .pipe(catchError(this.handleError));
-  }
-
-  // Get appartements by bloc
-  getAppartementsByBloc(bloc: Bloc): Observable<Appartement[]> {
-    return this.http.post<Appartement[]>(`${this.baseUrl}/by-bloc`, bloc)
-      .pipe(catchError(this.handleError));
-  }
-
-  // Error handler
-  private handleError(error: HttpErrorResponse) {
-    let errorMessage = 'An unknown error occurred!';
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-      if (error.error?.message) {
-        errorMessage += `\nDetails: ${error.error.message}`;
-      }
-    }
-    console.error(errorMessage);
-    return throwError(() => new Error(errorMessage));
+    return this.http.delete<void>(`${this.baseUrl}/appartements/${id}`);
   }
 }

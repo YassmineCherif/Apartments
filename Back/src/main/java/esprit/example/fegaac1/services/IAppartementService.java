@@ -1,29 +1,41 @@
 package esprit.example.fegaac1.services;
 
-import esprit.example.fegaac1.entities.Appartement;
-import esprit.example.fegaac1.entities.Bloc;
+import esprit.example.fegaac1.entities.*;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface IAppartementService {
 
-    // Add a new appartement with validation and business logic
-  //  Appartement addAppartement(Appartement appartement);
 
-    // Update an existing appartement
+    // ===================== PAYS =====================
+    Pays addPays(Pays pays);
+    Pays updatePays(Pays pays);
+    void deletePays(Long id);
+    Optional<Pays> getPaysById(Long id);
+    List<Pays> getAllPays();
+
+    // ===================== RESIDENCE =====================
+    Residence addResidence(Residence residence);
+    Residence updateResidence(Residence residence);
+    void deleteResidence(Long id);
+    Optional<Residence> getResidenceById(Long id);
+    List<Residence> getAllResidences();
+    List<Residence> getResidencesByPays(Long paysId);
+
+    // ===================== BLOC =====================
+    Bloc addBloc(Bloc bloc);
+    Bloc updateBloc(Bloc bloc);
+    void deleteBloc(Long id);
+    Optional<Bloc> getBlocById(Long id);
+    List<Bloc> getAllBlocs();
+    List<Bloc> getBlocsByResidence(Long residenceId);
+
+    // ===================== APPARTEMENT =====================
+    Appartement addAppartement(Appartement appartement);
     Appartement updateAppartement(Appartement appartement);
-
-    // Delete appartement by ID
     void deleteAppartement(Long id);
-
-    // Find appartement by ID (returns Optional in case not found)
     Optional<Appartement> getAppartementById(Long id);
-
-    // Get all appartements
     List<Appartement> getAllAppartements();
-
-    // Find appartements by bloc
-    List<Appartement> getAppartementsByBloc(Bloc bloc);
-
+    List<Appartement> getAppartementsByBloc(Long blocId);
 }

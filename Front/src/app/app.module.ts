@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';  // ✅ Add this
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';  // ✅ Add this
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,11 +18,15 @@ import { ChatComponent } from './componment/front/chat/chat.component';
 import { ComplaintsComponent } from './componment/front/complaints/complaints.component';
 import { ForumComponent } from './componment/back/forum/forum.component';
 import { DashboardComponent } from './componment/back/dashboard/dashboard.component';
-import { AppartementComponent } from './componment/back/appartement/appartement/appartement.component';
-import { ReadComponent } from './componment/back/appartement/read/read.component';
-import { UpdateComponent } from './componment/back/appartement/update/update.component';
-import { CreateComponent } from './componment/back/appartement/create/create.component';
+ import { ReadComponent } from './componment/back/appartement/read/read.component';
 import { HttpClient } from '@angular/common/http';
+import { ApartementsComponent } from './componment/front/reservation/apartements/apartements.component';
+import { ReserverComponent } from './componment/front/reservation/reserver/reserver.component';
+import { MesReservationsComponent } from './componment/front/reservation/mes-reservations/mes-reservations.component';
+import { ToastrModule } from 'ngx-toastr';
+import { BlocComponent } from './componment/back/bloc/bloc.component';
+import { PaysComponent } from './componment/back/pays/pays.component';
+import { ResidencesComponent } from './componment/back/residences/residences.component';
 
 @NgModule({
   declarations: [
@@ -44,10 +48,13 @@ import { HttpClient } from '@angular/common/http';
     ComplaintsComponent,
     ForumComponent,
     DashboardComponent,
-    AppartementComponent,
-    ReadComponent,
-    UpdateComponent,
-    CreateComponent,
+     ReadComponent,
+    ApartementsComponent,
+    ReserverComponent,
+    MesReservationsComponent,
+    BlocComponent,
+    PaysComponent,
+    ResidencesComponent,
 
     
     
@@ -59,6 +66,14 @@ import { HttpClient } from '@angular/common/http';
     AppRoutingModule,
     FormsModule,
     HttpClientModule, 
+    ReactiveFormsModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-top-right',  
+      preventDuplicates: true,
+      toastClass: 'ngx-toastr custom-toast',   
+    })
+
   ],
   providers: [],
   bootstrap: [AppComponent]

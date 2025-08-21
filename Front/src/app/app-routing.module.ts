@@ -10,8 +10,13 @@ import { ComplaintsComponent } from './componment/front/complaints/complaints.co
 import { ForumComponent } from './componment/back/forum/forum.component';
 import { DashboardComponent } from './componment/back/dashboard/dashboard.component';
 import { ReadComponent } from './componment/back/appartement/read/read.component';
-import { UpdateComponent } from './componment/back/appartement/update/update.component';
-
+ import { ApartementsComponent } from './componment/front/reservation/apartements/apartements.component';
+import { ReserverComponent } from './componment/front/reservation/reserver/reserver.component';
+import { MesReservationsComponent } from './componment/front/reservation/mes-reservations/mes-reservations.component';
+import { BlocComponent } from './componment/back/bloc/bloc.component';
+import { PaysComponent } from './componment/back/pays/pays.component';
+import { ResidencesComponent } from './componment/back/residences/residences.component';
+ 
 
 
 const routes: Routes = [
@@ -25,9 +30,14 @@ const routes: Routes = [
   { path: 'forum', component: ForumComponent },
   { path : 'dashboard', component: DashboardComponent },
   { path: 'admin', component: AdminComponent} ,
-  {path: 'readapp', component: ReadComponent},
-  //{path: 'updateapp', component: UpdateComponent},
-
+   {path: 'app', component: ApartementsComponent},
+   {path: 'reserver', component: ReserverComponent},
+  {path: 'mesres', component: MesReservationsComponent},
+  // back office 
+  {path: 'blocs', component: BlocComponent},
+  {path: 'apartements', component: ReadComponent},
+  {path: 'pays', component: PaysComponent},
+  {path: 'residences', component: ResidencesComponent},
 
 ];
 

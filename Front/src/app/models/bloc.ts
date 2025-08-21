@@ -5,4 +5,5 @@ export interface Bloc {
   nom: string;
   nombreEtages: number;
   appartement?: Appartement;
+ id_residence?: number;
 }

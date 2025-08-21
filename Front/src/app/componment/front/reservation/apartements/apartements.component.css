@@ -1,0 +1,96 @@
+/* Main container */
+.reservation-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 400px;
+  margin: 30px auto;
+  padding: 25px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Labels */
+.reservation-container label {
+  font-weight: 600;
+  color: #6BB7BE; /* same as .btn1 */
+  margin-bottom: 5px;
+}
+
+/* Selects and inputs */
+.reservation-container select,
+.reservation-container input[type="date"] {
+  padding: 10px 14px;
+  font-size: 14px;
+  border-radius: 7px;
+  border: 1px solid #ccc;
+  transition: all 0.3s;
+}
+
+.reservation-container select:focus,
+.reservation-container input[type="date"]:focus {
+  outline: none;
+  border-color: #6BB7BE;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+}
+
+/* Reserve button using your golden .button style */
+.reservation-container .reserve-btn {
+  cursor: pointer;
+  position: relative;
+  padding: 10px 24px;
+  font-size: 16px;
+  color: rgb(193, 163, 98);
+  border: 2px solid rgb(193, 163, 98);
+  border-radius: 34px;
+  background-color: transparent;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow: hidden;
+  display: inline-block;
+  text-decoration: none;
+  user-select: none;
+}
+
+.reservation-container .reserve-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 50px;
+  height: 50px;
+  border-radius: inherit;
+  transform: scale(0);
+  z-index: -1;
+  background-color: rgb(193, 163, 98);
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.reservation-container .reserve-btn:hover::before {
+  transform: scale(3);
+}
+
+.reservation-container .reserve-btn:hover {
+  color: #212121;
+  transform: scale(1.1);
+  box-shadow: 0 0px 20px rgba(193, 163, 98, 0.4);
+}
+
+.reservation-container .reserve-btn:active {
+  transform: scale(1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+  .reservation-container {
+    max-width: 90%;
+    padding: 15px;
+  }
+
+  .reservation-container select,
+  .reservation-container input[type="date"],
+  .reservation-container .reserve-btn {
+    width: 100%;
+  }
+}

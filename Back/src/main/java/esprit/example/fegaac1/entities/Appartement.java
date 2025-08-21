@@ -15,7 +15,7 @@ public class Appartement {
     private String titre;
     private String description;
 
-
+    private Long id_bloc;
 
 
 }

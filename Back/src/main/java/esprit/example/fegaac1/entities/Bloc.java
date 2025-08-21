@@ -24,6 +24,7 @@ public class Bloc {
     @OneToMany
     private Set<Appartement> appartement;
 
+    private Long  id_residence ;
 
 
 

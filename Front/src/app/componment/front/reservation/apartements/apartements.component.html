@@ -1,0 +1,41 @@
+<div class="reservation-container">
+
+  <div>
+    <label>Pays:</label>
+    <select [(ngModel)]="selectedPaysId" (change)="onPaysChange()">
+      <option *ngFor="let p of paysList" [value]="p.id_country">{{p.pays}}</option>
+    </select>
+  </div>
+
+  <div *ngIf="residenceList.length > 0">
+    <label>Residence:</label>
+    <select [(ngModel)]="selectedResidenceId" (change)="onResidenceChange()">
+      <option *ngFor="let r of residenceList" [value]="r.id_residence">{{r.nom}}</option>
+    </select>
+  </div>
+
+  <div *ngIf="blocList.length > 0">
+    <label>Bloc:</label>
+    <select [(ngModel)]="selectedBlocId" (change)="onBlocChange()">
+      <option *ngFor="let b of blocList" [value]="b.id_bloc">{{b.nom}}</option>
+    </select>
+  </div>
+
+  <div *ngIf="appartementList.length > 0">
+    <label>Appartement:</label>
+    <select [(ngModel)]="selectedAppartementId">
+      <option *ngFor="let a of appartementList" [value]="a.id_app">{{a.titre}}</option>
+    </select>
+  </div>
+
+  <div *ngIf="selectedAppartementId">
+    <label>Start Date:</label>
+    <input type="date" [(ngModel)]="startDate">
+
+    <label>End Date:</label>
+    <input type="date" [(ngModel)]="endDate">
+
+    <button class="button reserve-btn" (click)="reserveAppartement()">Reserve</button>
+  </div>
+
+</div>
