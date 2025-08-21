@@ -1,0 +1,28 @@
+<div class="container mt-3">
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <input type="text" class="form-control" placeholder="Search by title or description"
+             [(ngModel)]="searchTerm" (input)="filterAppartements()" />
+    </div>
+    <div class="col-md-6 text-end">
+      <button class="btn btn-success" (click)="ajouterAppartement()">Add Appartement</button>
+    </div>
+  </div>
+
+  <div *ngIf="message" class="alert alert-info">{{ message }}</div>
+
+  <div class="row">
+    <div *ngFor="let app of filteredAppartements" class="col-md-4 mb-3">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">{{ app.titre }}</h5>
+          <p class="card-text">{{ app.description }}</p>
+        </div>
+        <div class="card-footer d-flex justify-content-between">
+<button class="btn btn-primary btn-sm" (click)="openEditModal(app)">Edit</button>
+          <button class="btn btn-danger btn-sm" (click)="supprimerAppartement(app.id_app)">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

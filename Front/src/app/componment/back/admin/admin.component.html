@@ -1,0 +1,35 @@
+<div class="d-flex" id="wrapper">
+  <!-- Sidebar -->
+  <div class="bg-dark border-end" id="sidebar-wrapper">
+    <div class="sidebar-heading text-white p-3">My Backoffice</div>
+    <div class="list-group list-group-flush">
+      <a routerLink="/dashboard" routerLinkActive="active" class="list-group-item list-group-item-action bg-dark text-white">Dashboard</a>
+      <a routerLink="/readapp" routerLinkActive="active" class="list-group-item list-group-item-action bg-dark text-white">Complaints Admin</a>
+      <a routerLink="/forum" routerLinkActive="active" class="list-group-item list-group-item-action bg-dark text-white">Forum Admin</a>
+      <a routerLink="/settings" routerLinkActive="active" class="list-group-item list-group-item-action bg-dark text-white">Settings</a>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div id="page-content-wrapper" class="w-100">
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom justify-content-between">
+      <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button>
+
+      <!-- Right side (Profile & Logout) -->
+      <div>
+        <button class="btn btn-outline-secondary me-2">
+          <i class="bi bi-person-circle"></i> Profile
+        </button>
+        <button class="btn btn-danger" (click)="logout()">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </button>
+      </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+      <!-- This is where routed components will render -->
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

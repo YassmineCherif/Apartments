@@ -1,0 +1,37 @@
+<div *ngIf="appartementToUpdate" class="container mt-4 p-4 shadow rounded bg-white">
+  <h3 class="mb-4">Edit Appartement</h3>
+  <form (ngSubmit)="onSubmit()" #updateForm="ngForm">
+
+    <!-- Title -->
+    <div class="mb-3">
+      <label for="titre" class="form-label">Title</label>
+      <input type="text" id="titre" name="titre" class="form-control"
+             [(ngModel)]="appartementToUpdate.titre" required
+             #titre="ngModel" [ngClass]="{'is-invalid': titre.invalid && titre.touched}">
+      <div *ngIf="titre.invalid && titre.touched" class="invalid-feedback">
+        Title is required.
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea id="description" name="description" class="form-control" rows="3"
+                [(ngModel)]="appartementToUpdate.description" required
+                #description="ngModel" [ngClass]="{'is-invalid': description.invalid && description.touched}">
+      </textarea>
+      <div *ngIf="description.invalid && description.touched" class="invalid-feedback">
+        Description is required.
+      </div>
+    </div>
+
+    <!-- Submit & Back Buttons -->
+    <div class="d-flex justify-content-between">
+      <button type="button" class="btn btn-secondary" (click)="goBack()">Cancel</button>
+      <button type="submit" class="btn btn-primary" [disabled]="!updateForm.valid">Update Appartement</button>
+    </div>
+
+    <!-- Message -->
+    <div *ngIf="message" class="alert alert-info mt-3">{{ message }}</div>
+  </form>
+</div>
