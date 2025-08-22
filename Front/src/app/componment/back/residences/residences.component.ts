@@ -78,23 +78,55 @@ getPaysName(id?: number): string {
     });
   }
 
-  saveResidence(): void {
-    if (!this.residenceToUpdate) return;
 
-    if (this.residenceToUpdate.id_residence) {
-      // Update
-      this.service.updateResidence(this.residenceToUpdate).subscribe({
-        next: () => { this.fetchResidences(); this.closeModal(); this.showToast('Residence updated successfully ✅', 'success'); },
-        error: () => this.showToast('Failed to update residence ❌', 'error')
-      });
-    } else {
-      // Create
-      this.service.addResidence(this.residenceToUpdate).subscribe({
-        next: () => { this.fetchResidences(); this.closeModal(); this.showToast('Residence created successfully ✅', 'success'); },
-        error: () => this.showToast('Failed to create residence ❌', 'error')
-      });
-    }
+  
+  saveResidence(): void {
+  if (!this.residenceToUpdate) return;
+
+  const refreshData = () => {
+    this.fetchPays();        // refresh pays list
+    this.fetchResidences();  // refresh residences list
+    this.selectedPaysId = undefined; // reset select to null
+    this.filteredResidences = this.residences; // show all residences
+    this.closeModal();
+  };
+
+  if (this.residenceToUpdate.id_residence) {
+    // Update
+    this.service.updateResidence(this.residenceToUpdate).subscribe({
+      next: () => { 
+        refreshData(); 
+        this.showToast('Residence updated successfully ✅', 'success'); 
+      },
+      error: () => this.showToast('Failed to update residence ❌', 'error')
+    });
+  } else {
+    // Create
+    this.service.addResidence(this.residenceToUpdate).subscribe({
+      next: () => { 
+        refreshData(); 
+        this.showToast('Residence created successfully ✅', 'success'); 
+      },
+      error: () => this.showToast('Failed to create residence ❌', 'error')
+    });
   }
+}
+
+
+
+refreshData() {
+  this.fetchPays();
+  this.fetchResidences();
+  if (this.residenceToUpdate?.id_pays) {
+    this.selectedPaysId = this.residenceToUpdate.id_pays;
+    this.onPaysChange(); // refresh filteredResidences for this pays
+  } else {
+    this.selectedPaysId = undefined;
+  }
+  this.closeModal();
+}
+
+
 
   openEditModal(residence: Residence) {
     this.residenceToUpdate = { ...residence };

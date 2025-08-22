@@ -87,17 +87,31 @@ public class AppartementService implements IAppartementService {
 
     // ===================== BLOC =====================
     public Bloc addBloc(Bloc bloc) {
+        if (bloc.getId_residence() == null) {
+            throw new IllegalArgumentException("Residence ID cannot be null when creating a bloc");
+        }
         return blocRepository.save(bloc);
     }
 
     public Bloc updateBloc(Bloc bloc) {
-        if (bloc.getId_bloc() == null) throw new IllegalArgumentException("Bloc ID cannot be null");
+        if (bloc.getId_bloc() == null) {
+            throw new IllegalArgumentException("Bloc ID cannot be null");
+        }
+
         Bloc b = blocRepository.findById(bloc.getId_bloc())
                 .orElseThrow(() -> new IllegalArgumentException("Bloc not found"));
+
         b.setNom(bloc.getNom());
         b.setNombreEtages(bloc.getNombreEtages());
+
+        // Update Residence if changed
+        if (bloc.getId_residence() != null) {
+            b.setId_residence(bloc.getId_residence());
+        }
+
         return blocRepository.save(b);
     }
+
 
     public void deleteBloc(Long id) {
         if (!blocRepository.existsById(id)) throw new IllegalArgumentException("Bloc not found");
@@ -112,12 +126,11 @@ public class AppartementService implements IAppartementService {
         return blocRepository.findAll();
     }
 
-    // ✅ FIX: fetch blocs from Residence entity
+    //   fetch blocs from Residence entity
     public List<Bloc> getBlocsByResidence(Long residenceId) {
-        Residence residence = residenceRepository.findById(residenceId)
-                .orElseThrow(() -> new IllegalArgumentException("Residence not found"));
-        return List.copyOf(residence.getBlocs());
+        return blocRepository.findByIdResidence(residenceId);
     }
+
 
     // ===================== APPARTEMENT =====================
     public Appartement addAppartement(Appartement appartement) {
@@ -159,9 +172,11 @@ public class AppartementService implements IAppartementService {
     }
 
     public List<Appartement> getAppartementsByBloc(Long blocId) {
-        Bloc bloc = blocRepository.findById(blocId)
-                .orElseThrow(() -> new IllegalArgumentException("Bloc not found"));
-        return List.copyOf(bloc.getAppartement());
+        return appartementRepository.findByIdBloc(blocId);
     }
+
+
+
+
 
 }

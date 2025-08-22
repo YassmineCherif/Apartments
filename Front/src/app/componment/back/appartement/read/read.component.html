@@ -1,21 +1,35 @@
-<div class="container mt-3"> 
-  <h3 class="page-title">Appartements management</h3>
-  <div class="row mb-3">
-    <div class="col-md-6">
+<div class="container mt-3">
+  <h3 class="page-title text-center mb-4">Appartements Management</h3>
+
+  <!-- Bloc selection + search + add button -->
+  <div class="row mb-3 align-items-center">
+    <div class="col-md-4">
+      <select class="form-select" [(ngModel)]="selectedBlocId" (change)="onBlocChange()">
+        <option value="">-- Select Bloc --</option>
+        <option *ngFor="let b of blocsList" [value]="b.id_bloc">{{ b.nom }}</option>
+      </select>
+    </div>
+
+    <div class="col-md-4">
       <input type="text" class="form-control" placeholder="Search by title or description"
              [(ngModel)]="searchTerm" (input)="filterAppartements()" />
     </div>
-    <div class="col-md-6 text-end">
+
+    <div class="col-md-4 text-end">
       <button class="btn btn-success" (click)="openCreateModal()">Add Appartement</button>
     </div>
   </div>
 
+  <!-- Appartement cards -->
   <div class="row">
     <div *ngFor="let app of filteredAppartements" class="col-md-4 mb-3">
       <div class="card h-100 shadow-sm">
         <div class="card-body">
           <h5 class="card-title">{{ app.titre }}</h5>
-          <p class="card-text">{{ app.description }}</p>
+          <p class="card-text">
+            {{ app.description }} <br />
+            Bloc: {{ getBlocName(app.id_bloc) }}
+          </p>
         </div>
         <div class="card-footer d-flex justify-content-between">
           <button class="btn btn-primary btn-sm" (click)="openEditModal(app)">Edit</button>
@@ -44,6 +58,12 @@
             <label class="form-label">Description</label>
             <textarea class="form-control" [(ngModel)]="appartementToUpdate.description" name="description" rows="3" required></textarea>
           </div>
+          <div class="mb-3">
+            <label class="form-label">Bloc</label>
+            <select class="form-select" [(ngModel)]="appartementToUpdate.id_bloc" name="id_bloc" required>
+              <option *ngFor="let b of blocsList" [value]="b.id_bloc">{{ b.nom }}</option>
+            </select>
+          </div>
         </form>
       </div>
       <div class="modal-footer">
@@ -56,10 +76,9 @@
   </div>
 </div>
 
- 
-
-<div class="toast-container">
-  <div *ngFor="let toast of toasts" class="toast" [ngClass]="toast.type">
+<!-- Toasts -->
+<div class="toast-container position-fixed top-0 end-0 p-3">
+  <div *ngFor="let toast of toasts" class="toast show" [ngClass]="toast.type">
     {{ toast.message }}
   </div>
 </div>

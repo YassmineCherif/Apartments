@@ -88,6 +88,7 @@ public class AppartementController {
         return appartementService.getBlocsByResidence(residenceId);
     }
 
+
     @PostMapping("/blocs")
     public Bloc addBloc(@RequestBody Bloc bloc) {
         return appartementService.addBloc(bloc);
