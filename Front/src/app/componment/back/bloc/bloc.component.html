@@ -5,10 +5,12 @@
   <div class="row mb-3 align-items-center">
     <div class="col-md-4">
       <select class="form-select" [(ngModel)]="selectedResidenceId" (change)="onResidenceChange()">
-        <option value="">-- Select Residence --</option>
+        <option [ngValue]="undefined" disabled>-- Select Residence --</option>
         <option *ngFor="let r of residencesList" [value]="r.id_residence">{{ r.nom }}</option>
       </select>
     </div>
+ 
+
 
     <div class="col-md-4">
       <input type="text" class="form-control" placeholder="Search by name"
@@ -45,7 +47,7 @@
 
 <!-- Create/Update Modal -->
 <div class="modal fade" id="blocModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog" style="margin-top: 250px;">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">{{ blocToUpdate?.id_bloc ? 'Edit Bloc' : 'Create Bloc' }}</h5>

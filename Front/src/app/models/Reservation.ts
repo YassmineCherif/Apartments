@@ -6,4 +6,4 @@ export interface Reservation {
   dateFin: string;   
   approved: boolean;
   appartements?: Appartement;
-}
+} 

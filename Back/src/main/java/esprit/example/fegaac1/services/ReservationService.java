@@ -21,6 +21,8 @@ public class ReservationService  implements IReservationService {
     private final BlocRepository blocRepository;
     private final AppartementRepository appartementRepository;
     private final ReservationRepository reservationRepository;
+    private final UserRepository userRepository;
+
 
     // Get all countries
     public List<Pays> getAllPays() {
@@ -58,9 +60,33 @@ public class ReservationService  implements IReservationService {
         reservation.setAppartements(appartement);
         reservation.setDateDebut(start);
         reservation.setDateFin(end);
-        reservation.setApproved(false); // default
+        reservation.setApproved(2); // default
         return reservationRepository.save(reservation);
     }
+
+    public Reservation reserverAppartement(Long appartementId, Long userId, LocalDate dateDebut, LocalDate dateFin) {
+        Appartement appartement = appartementRepository.findById(appartementId)
+                .orElseThrow(() -> new RuntimeException("Appartement not found"));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Reservation reservation = new Reservation();
+        reservation.setAppartements(appartement);
+        reservation.setUser(user);
+        reservation.setDateDebut(dateDebut);
+        reservation.setDateFin(dateFin);
+        reservation.setApproved(2);
+
+        return reservationRepository.save(reservation);
+    }
+
+
+
+    public boolean existsByUserAndAppartement(Long userId, Long appartementId) {
+        return reservationRepository.existsReservation(userId, appartementId);
+    }
+
 
 
 

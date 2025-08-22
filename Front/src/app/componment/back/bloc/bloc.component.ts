@@ -18,7 +18,7 @@ export class BlocComponent implements OnInit {
   toasts: { message: string, type: 'success' | 'error' }[] = [];
 
   residencesList: Residence[] = [];
-  selectedResidenceId?: number;
+  selectedResidenceId?: number = undefined; 
 
   constructor(private service: AppartementService) {}
 

@@ -4,4 +4,5 @@ export interface Appartement {
   description: string;
     id_bloc?: number;
 
+    image?: string;
 }

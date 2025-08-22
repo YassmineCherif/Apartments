@@ -36,6 +36,28 @@ export class ReservationService {
   createReservation(appartementId: number, start: string, end: string): Observable<Reservation> {
     return this.http.post<Reservation>(`${this.apiUrl}/${appartementId}?start=${start}&end=${end}`, {});
   }
+
+reserverAppartement(appartementId: number, userId: number): Observable<any> {
+  return this.http.post(`${this.apiUrl}/reserver/${appartementId}?userId=${userId}`, {}, { responseType: 'text' });
+}
+
+
+
+checkReservation(appartementId: number, userId: number): Observable<boolean> {
+  return this.http.get<boolean>(`${this.apiUrl}/exists?appartementId=${appartementId}&userId=${userId}`);
+}
+
+
+reserverAppartementWithDates(appartementId: number, userId: number, dateDebut: string, dateFin: string) {
+  return this.http.post<any>(`${this.apiUrl}/reserver/${appartementId}`, null, {
+    params: {
+      userId: userId.toString(),
+      dateDebut: dateDebut,
+      dateFin: dateFin
+    }
+  });
+}
+
 }
 
 

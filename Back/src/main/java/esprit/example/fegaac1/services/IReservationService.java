@@ -23,4 +23,9 @@ public interface IReservationService {
 
     public Reservation createReservation(Long appartementId, LocalDate start, LocalDate end);
 
+
+    public Reservation reserverAppartement(Long appartementId, Long userId, LocalDate dateDebut, LocalDate dateFin);
+
+    public boolean existsByUserAndAppartement(Long userId, Long appartementId);
+
 }

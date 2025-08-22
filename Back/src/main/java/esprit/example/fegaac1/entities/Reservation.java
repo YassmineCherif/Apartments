@@ -17,11 +17,13 @@ public class Reservation {
 
     private LocalDate dateDebut;
     private LocalDate dateFin;
-    private boolean approved ;
+    private int approved ;
 
     @ManyToOne
     Appartement  appartements;
 
-
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }

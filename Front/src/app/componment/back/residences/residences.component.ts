@@ -18,7 +18,8 @@ export class ResidencesComponent implements OnInit {
   toasts: { message: string, type: 'success' | 'error' }[] = [];
 
   paysList: Pays[] = [];
-  selectedPaysId?: number;
+  selectedPaysId?: number = undefined; 
+
 
   constructor(private service: AppartementService) {}
 
@@ -28,7 +29,8 @@ export class ResidencesComponent implements OnInit {
   }
 
 
-  fetchPays(): void {
+ 
+fetchPays(): void {
   this.service.getAllPays().subscribe({
     next: data => this.paysList = data,
     error: () => this.showToast('Failed to load pays ❌', 'error')

@@ -5,7 +5,7 @@
   <div class="row mb-3 align-items-center">
     <div class="col-md-4">
       <select class="form-select" [(ngModel)]="selectedBlocId" (change)="onBlocChange()">
-        <option value="">-- Select Bloc --</option>
+        <option [ngValue]="undefined" disabled>-- Select Bloc --</option>
         <option *ngFor="let b of blocsList" [value]="b.id_bloc">{{ b.nom }}</option>
       </select>
     </div>
@@ -42,7 +42,7 @@
 
 <!-- Create/Update Modal -->
 <div class="modal fade" id="appartementModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog" style="margin-top: 250px;">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">{{ appartementToUpdate?.id_app ? 'Edit Appartement' : 'Create Appartement' }}</h5>

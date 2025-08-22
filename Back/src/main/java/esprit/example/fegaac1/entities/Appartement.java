@@ -17,6 +17,6 @@ public class Appartement {
 
     private Long id_bloc;
 
-
+    private String image;
 }
 

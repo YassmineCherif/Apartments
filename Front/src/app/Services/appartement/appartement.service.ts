@@ -57,6 +57,7 @@ export class AppartementService {
     return this.http.delete<void>(`${this.baseUrl}/residences/${id}`);
   }
 
+
   // ===================== BLOC =====================
   getAllBlocs(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/blocs`);

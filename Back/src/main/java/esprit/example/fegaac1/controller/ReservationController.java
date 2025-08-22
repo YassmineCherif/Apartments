@@ -5,6 +5,7 @@ import esprit.example.fegaac1.entities.*;
 import esprit.example.fegaac1.services.IReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -47,6 +48,27 @@ public class ReservationController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end
     ) {
         return reservationService.createReservation(appartementId, start, end);
+    }
+
+    @PostMapping("/reserver/{appartementId}")
+    public ResponseEntity<?> reserverAppartement(
+            @PathVariable Long appartementId,
+            @RequestParam Long userId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateDebut,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFin
+    ) {
+        Reservation reservation = reservationService.reserverAppartement(appartementId, userId, dateDebut, dateFin);
+        return ResponseEntity.ok(reservation);
+    }
+
+
+    @GetMapping("/exists")
+    public ResponseEntity<Boolean> isReserved(
+            @RequestParam Long appartementId,
+            @RequestParam Long userId
+    ) {
+        boolean exists = reservationService.existsByUserAndAppartement(userId, appartementId);
+        return ResponseEntity.ok(exists);
     }
 
 
