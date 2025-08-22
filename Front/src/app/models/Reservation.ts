@@ -4,6 +4,6 @@ export interface Reservation {
   id_reservation?: number;
   dateDebut: string;  
   dateFin: string;   
-  approved: boolean;
+  approved: number;
   appartements?: Appartement;
 } 

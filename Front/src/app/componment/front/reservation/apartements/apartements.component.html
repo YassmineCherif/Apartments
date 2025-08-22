@@ -50,10 +50,11 @@
         <h5 class="card-title">{{ app.titre }}</h5>
         <p class="card-text">{{ app.description || 'No description available' }}</p>
         <button *ngIf="!reservedApartments.includes(app.id_app!)"
-        class="btn btn-success mt-auto" 
-        (click)="openReservationModal(app)">
-          Réserver
+         class="btn btn-custom mt-auto"
+         (click)="openReservationModal(app)">
+        Réserver
         </button>
+
 
         <span *ngIf="reservedApartments.includes(app.id_app!)" class="text-muted mt-auto">Déjà réservé</span>
 

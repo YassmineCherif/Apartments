@@ -28,7 +28,7 @@ export class ApartementsComponent implements OnInit {
   selectedBlocId?: number;
   selectedAppartementId?: number;
 
-reservation: Reservation = { dateDebut: '', dateFin: '', approved: false };
+reservation: Reservation = { dateDebut: '', dateFin: '', approved: 0 };
 selectedAppartement: Appartement | null = null;
 
 
@@ -140,11 +140,23 @@ reserver(app: Appartement): void {
 
 // Open modal when clicking "Réserver"
 openReservationModal(app: Appartement) {
-  this.selectedAppartement = app;
-  this.reservation = { dateDebut: '', dateFin: '', approved: false }; // reset dates
-  const modal = new bootstrap.Modal(document.getElementById('reservationModal')!);
-  modal.show();
+  this.reservationService.hasApprovedReservation(this.staticUserId).subscribe({
+    next: (hasApproved: boolean) => {
+      if (hasApproved) {
+        this.showToast("Vous avez déjà une réservation approuvée , vous ne pouvez pas en faire une autre ❌", "error");
+        return; // Stop here
+      }
+
+      // Otherwise allow modal to open
+      this.selectedAppartement = app;
+      this.reservation = { dateDebut: '', dateFin: '', approved: 0 }; 
+      const modal = new bootstrap.Modal(document.getElementById('reservationModal')!);
+      modal.show();
+    },
+    error: () => this.showToast("Erreur lors de la vérification des réservations ❌", "error")
+  });
 }
+
 
 // Confirm reservation after selecting dates
 confirmReservation() {

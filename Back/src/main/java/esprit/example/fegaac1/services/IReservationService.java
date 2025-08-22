@@ -28,4 +28,9 @@ public interface IReservationService {
 
     public boolean existsByUserAndAppartement(Long userId, Long appartementId);
 
+    public List<Reservation> getReservationsByUser(Long userId);
+
+    public boolean hasApprovedReservation(Long userId);
+
+
 }

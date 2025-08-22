@@ -73,4 +73,18 @@ public class ReservationController {
 
 
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Reservation>> getReservationsByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(reservationService.getReservationsByUser(userId));
+    }
+
+
+
+    @GetMapping("/hasApproved/{userId}")
+    public boolean hasApprovedReservation(@PathVariable Long userId) {
+        return reservationService.hasApprovedReservation(userId);
+    }
+
+
+
 }

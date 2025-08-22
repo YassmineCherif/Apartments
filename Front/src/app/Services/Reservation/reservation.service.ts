@@ -58,6 +58,19 @@ reserverAppartementWithDates(appartementId: number, userId: number, dateDebut: s
   });
 }
 
+
+
+getReservationsByUser(userId: number): Observable<Reservation[]> {
+  return this.http.get<Reservation[]>(`${this.apiUrl}/user/${userId}`);
+}
+
+
+
+hasApprovedReservation(userId: number) {
+  return this.http.get<boolean>(`${this.apiUrl}/hasApproved/${userId}`);
+}
+
+
 }
 
 

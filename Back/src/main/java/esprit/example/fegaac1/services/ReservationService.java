@@ -89,5 +89,20 @@ public class ReservationService  implements IReservationService {
 
 
 
+    public List<Reservation> getReservationsByUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return reservationRepository.findByUser(user);
+    }
+
+
+
+
+    public boolean hasApprovedReservation(Long userId) {
+        return reservationRepository.existsByUserIdAndApproved(userId, 1);
+    }
+
+
+
 
 }
