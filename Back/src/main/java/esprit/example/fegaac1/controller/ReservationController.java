@@ -62,6 +62,7 @@ public class ReservationController {
     }
 
 
+
     @GetMapping("/exists")
     public ResponseEntity<Boolean> isReserved(
             @RequestParam Long appartementId,
@@ -84,6 +85,17 @@ public class ReservationController {
     public boolean hasApprovedReservation(@PathVariable Long userId) {
         return reservationService.hasApprovedReservation(userId);
     }
+
+
+    @GetMapping("/reservations/overlap")
+    public boolean checkOverlap(
+            @RequestParam Long userId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end
+    ) {
+        return reservationService.hasOverlap(userId, start, end);
+    }
+
 
 
 

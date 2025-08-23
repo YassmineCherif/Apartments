@@ -71,6 +71,15 @@ hasApprovedReservation(userId: number) {
 }
 
 
+checkOverlap(userId: number, start: string, end: string) {
+  return this.http.get<boolean>(
+    `${this.apiUrl}/reservations/overlap`,
+    { params: { userId: userId.toString(), start, end } }
+  );
+}
+
+
+
 }
 
 

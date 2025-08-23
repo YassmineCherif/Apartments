@@ -21,8 +21,7 @@ import { DashboardComponent } from './componment/back/dashboard/dashboard.compon
  import { ReadComponent } from './componment/back/appartement/read/read.component';
 import { HttpClient } from '@angular/common/http';
 import { ApartementsComponent } from './componment/front/reservation/apartements/apartements.component';
-import { ReserverComponent } from './componment/front/reservation/reserver/reserver.component';
-import { MesReservationsComponent } from './componment/front/reservation/mes-reservations/mes-reservations.component';
+ import { MesReservationsComponent } from './componment/front/reservation/mes-reservations/mes-reservations.component';
 import { ToastrModule } from 'ngx-toastr';
 import { BlocComponent } from './componment/back/bloc/bloc.component';
 import { PaysComponent } from './componment/back/pays/pays.component';
@@ -50,8 +49,7 @@ import { ResidencesComponent } from './componment/back/residences/residences.com
     DashboardComponent,
      ReadComponent,
     ApartementsComponent,
-    ReserverComponent,
-    MesReservationsComponent,
+     MesReservationsComponent,
     BlocComponent,
     PaysComponent,
     ResidencesComponent,

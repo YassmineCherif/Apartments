@@ -6,4 +6,12 @@ export interface Reservation {
   dateFin: string;   
   approved: number;
   appartements?: Appartement;
+
+
+    // Infos récupérées manuellement
+  blocNom?: string;
+  residenceNom?: string;
+  paysNom?: string;
+
+  
 } 

@@ -64,12 +64,24 @@ public class ReservationService  implements IReservationService {
         return reservationRepository.save(reservation);
     }
 
+
     public Reservation reserverAppartement(Long appartementId, Long userId, LocalDate dateDebut, LocalDate dateFin) {
         Appartement appartement = appartementRepository.findById(appartementId)
-                .orElseThrow(() -> new RuntimeException("Appartement not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Appartement not found with id: " + appartementId));
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+
+        // Validate dates
+        if (dateDebut == null || dateFin == null || dateDebut.isAfter(dateFin)) {
+            throw new IllegalArgumentException("Invalid reservation dates");
+        }
+
+        // Check for overlapping reservations
+        boolean hasOverlap = hasOverlap(userId, dateDebut, dateFin);
+        if (hasOverlap) {
+            throw new IllegalArgumentException("You already have a reservation that overlaps with these dates");
+        }
 
         Reservation reservation = new Reservation();
         reservation.setAppartements(appartement);
@@ -80,6 +92,7 @@ public class ReservationService  implements IReservationService {
 
         return reservationRepository.save(reservation);
     }
+
 
 
 
@@ -101,6 +114,28 @@ public class ReservationService  implements IReservationService {
     public boolean hasApprovedReservation(Long userId) {
         return reservationRepository.existsByUserIdAndApproved(userId, 1);
     }
+
+
+    public boolean hasOverlap(Long userId, LocalDate newStart, LocalDate newEnd) {
+        System.out.println("Backend: checking overlap for user " + userId +
+                " from " + newStart + " to " + newEnd);
+
+        List<Reservation> approvedReservations = reservationRepository.findApprovedReservationsByUser(userId);
+
+        for (Reservation r : approvedReservations) {
+            System.out.println("Backend: existing approved reservation = " +
+                    r.getDateDebut() + " -> " + r.getDateFin());
+            if (!(newEnd.isBefore(r.getDateDebut()) || newStart.isAfter(r.getDateFin()))) {
+                System.out.println("Backend: overlap detected!");
+                return true;
+            }
+        }
+        System.out.println("Backend: no overlap");
+        return false;
+    }
+
+
+
 
 
 

@@ -9,18 +9,23 @@
     <div class="row g-0">
       
       <!-- Appartement Image -->
-      <div class="col-md-4">
+      <div class="col-md-4 d-flex align-items-center justify-content-center">
         <img 
           [src]="r.appartements?.image ? '/assets/' + r.appartements?.image : '/assets/images/app1.png'" 
           class="img-fluid rounded-start" 
           alt="{{ r.appartements?.titre }}">
       </div>
 
+
+
       <!-- Reservation & Appartement Details -->
       <div class="col-md-8">
         <div class="card-body">
-          <h5 class="card-title">{{ r.appartements?.titre }}</h5>
-          <p class="card-text">{{ r.appartements?.description || 'Pas de description disponible' }}</p>
+                  <strong>Pays:</strong> {{ r.paysNom || '---' }} <br>
+                  <strong>Résidence:</strong> {{ r.residenceNom || '---' }}  <br>
+                  <strong>Bloc:</strong> {{ r.blocNom || '---' }}  <br>
+         <strong>Appartement: </strong>{{ r.appartements?.titre }} 
+         <p class="card-text">{{ r.appartements?.description || 'Pas de description disponible' }}</p>
 
           <p class="mb-1">
             <strong>Du:</strong> {{ r.dateDebut }}  

@@ -25,4 +25,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
                                       @Param("approved") int approved);
 
 
+    @Query("SELECT r FROM Reservation r WHERE r.user.id = :userId AND r.approved = 1")
+    List<Reservation> findApprovedReservationsByUser(@Param("userId") Long userId);
+
+
+
 }

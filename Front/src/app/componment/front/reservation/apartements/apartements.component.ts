@@ -142,10 +142,6 @@ reserver(app: Appartement): void {
 openReservationModal(app: Appartement) {
   this.reservationService.hasApprovedReservation(this.staticUserId).subscribe({
     next: (hasApproved: boolean) => {
-      if (hasApproved) {
-        this.showToast("Vous avez déjà une réservation approuvée , vous ne pouvez pas en faire une autre ❌", "error");
-        return; // Stop here
-      }
 
       // Otherwise allow modal to open
       this.selectedAppartement = app;
@@ -167,23 +163,48 @@ confirmReservation() {
     return;
   }
 
-  this.reservationService.reserverAppartementWithDates(
-    this.selectedAppartement.id_app!,
-    this.staticUserId,
-    this.reservation.dateDebut,
-    this.reservation.dateFin
-  ).subscribe({
-    next: (res: any) => {
-      this.showToast(res.message || 'Réservation effectuée ✅', 'success');
-      this.reservedApartments.push(this.selectedAppartement!.id_app!);
-      // close modal
-      const modalEl = document.getElementById('reservationModal')!;
-      const modal = bootstrap.Modal.getInstance(modalEl);
-      modal?.hide();
+  // Use the raw date string from the date picker
+  const start = this.reservation.dateDebut; // should be 'yyyy-MM-dd'
+  const end = this.reservation.dateFin;
+
+  console.log('Frontend: start date =', start, ', end date =', end); // <-- log here
+
+  // Check overlap first
+  this.reservationService.checkOverlap(this.staticUserId, start, end).subscribe({
+    next: (hasOverlap: boolean) => {
+      console.log('Frontend: overlap result =', hasOverlap); // log result
+      if (hasOverlap) {
+        this.showToast('You already have a reservation that overlaps with these dates ❌', 'error');
+        return;
+      }
+
+      // Proceed to reserve if no overlap
+      this.reservationService.reserverAppartementWithDates(
+        this.selectedAppartement!.id_app!,
+        this.staticUserId,
+        start,
+        end
+      ).subscribe({
+        next: (res: any) => {
+          this.showToast(res.message || 'Réservation effectuée ✅', 'success');
+          this.reservedApartments.push(this.selectedAppartement!.id_app!);
+
+          const modalEl = document.getElementById('reservationModal')!;
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          modal?.hide();
+        },
+        error: (err) => {
+          this.showToast(err?.error?.message || 'Erreur lors de la réservation ❌', 'error');
+        }
+      });
+
     },
-    error: () => this.showToast('Erreur lors de la réservation ❌', 'error')
+    error: () => this.showToast('Erreur lors de la vérification des dates ❌', 'error')
   });
 }
+
+
+
 
 
   showToast(message: string, type: 'success' | 'error') {

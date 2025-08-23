@@ -32,5 +32,5 @@ public interface IReservationService {
 
     public boolean hasApprovedReservation(Long userId);
 
-
+    public boolean hasOverlap(Long userId, LocalDate newStart, LocalDate newEnd);
 }
