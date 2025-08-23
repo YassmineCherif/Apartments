@@ -26,6 +26,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { BlocComponent } from './componment/back/bloc/bloc.component';
 import { PaysComponent } from './componment/back/pays/pays.component';
 import { ResidencesComponent } from './componment/back/residences/residences.component';
+import { RespondReservationComponent } from './componment/back/respond-reservation/respond-reservation.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { ResidencesComponent } from './componment/back/residences/residences.com
     BlocComponent,
     PaysComponent,
     ResidencesComponent,
+    RespondReservationComponent,
 
     
     

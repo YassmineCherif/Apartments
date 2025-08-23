@@ -2,6 +2,7 @@ package esprit.example.fegaac1.controller;
 
 
 import esprit.example.fegaac1.entities.*;
+import esprit.example.fegaac1.repository.ReservationRepository;
 import esprit.example.fegaac1.services.IReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/reservation")
@@ -18,6 +20,7 @@ import java.util.Set;
 public class ReservationController {
 
     private final IReservationService reservationService;
+    private final ReservationRepository reservationRepository;
 
     @GetMapping("/pays")
     public List<Pays> getAllPays() {
@@ -95,6 +98,26 @@ public class ReservationController {
     ) {
         return reservationService.hasOverlap(userId, start, end);
     }
+
+
+        @PutMapping("/approval/{id}")
+        public ResponseEntity<?> updateApproval(
+                @PathVariable Long id,
+                @RequestParam int status
+        ) {
+            Reservation res = reservationService.updateApproval(id, status);
+            return ResponseEntity.ok(res);
+        }
+
+
+
+    @GetMapping("/all")
+    public List<Reservation> getAllReservations() {
+        return reservationRepository.findAll();
+    }
+
+
+
 
 
 

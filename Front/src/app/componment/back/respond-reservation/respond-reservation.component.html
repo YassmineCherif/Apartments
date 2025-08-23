@@ -1,16 +1,18 @@
-<div class="container mt-3"> 
+<div class="container mt-3">
   <h3 class="page-title text-center mb-4">Gestion des Réservations</h3>
 
-  <!-- Filter Pays -->
-  <div class="form-row mb-3">
-    <label class="form-label">Choisir un Pays</label>
-    <select class="form-select" [(ngModel)]="selectedCountry" (change)="getReservations()">
-      <option value="all">-- Sélectionner un pays --</option>
-      <option *ngFor="let pays of paysList" [value]="pays.pays">{{ pays.pays }}</option>
-    </select>
-  </div>
+  <!-- Filters -->
+    <div class="form-row mb-3">
+  <label class="form-label">Choisir un Pays</label>
+  <select class="form-select" [(ngModel)]="selectedPaysId" (change)="onPaysChange()">
+    <option [ngValue]="undefined" disabled>-- Sélectionner un pays --</option>
+    <option *ngFor="let pays of paysList" [value]="pays.id_country">{{ pays.pays }}</option>
+  </select>
+</div>
 
-  <!-- Reservations List -->
+
+
+  <!-- Reservation Cards -->
   <div *ngIf="reservations.length === 0" class="alert alert-info">
     Aucune réservation disponible.
   </div>
@@ -41,6 +43,11 @@
               {{ r.approved === 1 ? 'Approuvé' : (r.approved === 0 ? 'Refusé' : 'En attente') }}
             </span>
           </p>
+
+          <div *ngIf="r.approved === 2">
+            <button class="btn btn-success me-2" (click)="acceptReservation(r)">Accepter</button>
+            <button class="btn btn-danger" (click)="declineReservation(r)">Refuser</button>
+          </div>
         </div>
       </div>
     </div>

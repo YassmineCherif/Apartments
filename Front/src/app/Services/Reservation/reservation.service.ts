@@ -78,10 +78,25 @@ checkOverlap(userId: number, start: string, end: string) {
   );
 }
 
+updateReservationApproval(id: number, status: number) {
+  return this.http.put<Reservation>(
+    `${this.apiUrl}/approval/${id}?status=${status}`,
+    {}
+  );
+}
 
-
+getAllReservations(): Observable<Reservation[]> {
+  return this.http.get<Reservation[]>(`${this.apiUrl}/all`);
 }
 
 
+getReservationsByCountry(country: string): Observable<any[]> {
+  if (country === 'all') {
+    return this.http.get<any[]>(`${this.apiUrl}/reservations`); // returns all
+  } else {
+    return this.http.get<any[]>(`${this.apiUrl}/reservations/country/${country}`);
+  }
+}
  
- 
+ }
+

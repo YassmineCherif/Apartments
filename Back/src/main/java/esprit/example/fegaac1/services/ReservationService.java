@@ -137,6 +137,17 @@ public class ReservationService  implements IReservationService {
 
 
 
+        public Reservation updateApproval(Long reservationId, int status) {
+        Reservation r = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+        r.setApproved(status);
+        return reservationRepository.save(r);
+    }
+
+
+
+
+
 
 
 

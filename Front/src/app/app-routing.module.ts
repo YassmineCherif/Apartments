@@ -15,6 +15,7 @@ import { ReadComponent } from './componment/back/appartement/read/read.component
 import { BlocComponent } from './componment/back/bloc/bloc.component';
 import { PaysComponent } from './componment/back/pays/pays.component';
 import { ResidencesComponent } from './componment/back/residences/residences.component';
+import { RespondReservationComponent } from './componment/back/respond-reservation/respond-reservation.component';
  
 
 
@@ -35,7 +36,8 @@ const routes: Routes = [
   {path: 'blocs', component: BlocComponent},
   {path: 'apartements', component: ReadComponent},
   {path: 'pays', component: PaysComponent},
-  {path: 'residences', component: ResidencesComponent},
+  {path: 'residences', component: ResidencesComponent}, 
+  {path: 'respond', component: RespondReservationComponent}, 
 
 ];
 
