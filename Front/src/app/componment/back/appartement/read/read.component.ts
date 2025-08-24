@@ -19,6 +19,8 @@ export class ReadComponent implements OnInit {
   searchTerm: string = '';
   toasts: { message: string, type: 'success' | 'error' }[] = [];
 
+  selectedFile?: File;
+
   constructor(private service: AppartementService) {}
 
   ngOnInit(): void {
@@ -75,32 +77,50 @@ export class ReadComponent implements OnInit {
     });
   }
 
-  saveAppartement(): void {
-    if (!this.appartementToUpdate || !this.appartementToUpdate.id_bloc) {
-      this.showToast('Please select a bloc ❌', 'error');
-      return;
-    }
+  onImageSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
 
-    const refreshData = () => {
-      this.fetchAppartements();
-      this.selectedBlocId = undefined;
-      if (this.appartementToUpdate) this.appartementToUpdate.id_bloc = undefined;
-      this.appartementToUpdate = null;
-      this.closeModal();
-    };
-
-    if (this.appartementToUpdate.id_app) {
-      this.service.updateAppartement(this.appartementToUpdate).subscribe({
-        next: () => { refreshData(); this.showToast('Appartement updated successfully ✅', 'success'); },
-        error: () => this.showToast('Failed to update appartement ❌', 'error')
-      });
-    } else {
-      this.service.addAppartement(this.appartementToUpdate).subscribe({
-        next: () => { refreshData(); this.showToast('Appartement created successfully ✅', 'success'); },
-        error: () => this.showToast('Failed to create appartement ❌', 'error')
-      });
+      if (this.appartementToUpdate) {
+        // prepare path for DB
+        this.appartementToUpdate.image = 'images/' + file.name;
+      }
     }
   }
+
+
+  
+  saveAppartement(): void {
+  if (!this.appartementToUpdate || !this.appartementToUpdate.id_bloc) {
+    this.showToast('Please select a bloc ❌', 'error');
+    return;
+  }
+
+  if (!this.selectedFile) {
+    this.showToast('Please select an image ❌', 'error');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('file', this.selectedFile);
+  formData.append('titre', this.appartementToUpdate.titre!);
+  formData.append('description', this.appartementToUpdate.description!);
+  formData.append('id_bloc', this.appartementToUpdate.id_bloc!.toString());
+
+  this.service.addAppartementWithImage(formData).subscribe({
+    next: (res) => {
+      this.fetchAppartements();
+      this.appartementToUpdate = null;
+      this.selectedFile = undefined;
+      this.showToast('Appartement created ✅', 'success');
+      this.closeModal();
+    },
+    error: () => this.showToast('Failed to create appartement ❌', 'error')
+  });
+}
+
+
 
   openEditModal(app: Appartement) {
     this.appartementToUpdate = { ...app };
@@ -108,7 +128,8 @@ export class ReadComponent implements OnInit {
   }
 
   openCreateModal() {
-    this.appartementToUpdate = { id_app: undefined, titre: '', description: '', id_bloc: undefined };
+    this.appartementToUpdate = { id_app: undefined, titre: '', description: '', id_bloc: undefined, image: '' };
+    this.selectedFile = undefined;
     new bootstrap.Modal(document.getElementById('appartementModal')!).show();
   }
 

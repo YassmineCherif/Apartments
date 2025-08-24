@@ -55,30 +55,24 @@ export class RespondReservationComponent implements OnInit {
   }
 
   // ================== HANDLE COUNTRY CHANGE ==================
-  onPaysChange(): void {
-    if (!this.selectedPaysId) {
-      console.log('[onPaysChange] No country selected -> clearing reservations');
-      this.reservations = [];
-      return;
-    }
-
-    const selectedPays = this.paysList.find(p => p.id_country === this.selectedPaysId)?.pays;
-    console.log('SelectedPaysId =', this.selectedPaysId, '| SelectedPays =', selectedPays);
-
-    // Debug: check matches
-    console.table(this.allReservations.map(r => ({
-      id: r.id_reservation,
-      paysNom: r.paysNom,
-      matchNormalized: this.normalize(r.paysNom) === this.normalize(selectedPays ?? '')
-    })));
-
-    // Filter reservations locally using normalized strings
-    this.reservations = this.allReservations.filter(
-      r => this.normalize(r.paysNom) === this.normalize(selectedPays ?? '')
-    );
-
-    console.log('[onPaysChange] filtered reservations count:', this.reservations.length);
+onPaysChange(): void {
+  if (this.selectedPaysId == null) {
+    // Default option selected -> show all reservations
+    this.reservations = [...this.allReservations];
+    console.log('[onPaysChange] default selected -> showing all reservations', this.reservations.length);
+    return;
   }
+
+  const selectedPays = this.paysList.find(p => p.id_country === this.selectedPaysId)?.pays;
+  console.log('[onPaysChange] selectedPaysId:', this.selectedPaysId, 'selectedPays:', selectedPays);
+
+  this.reservations = this.allReservations.filter(
+    r => r.paysNom?.trim().toLowerCase() === selectedPays?.trim().toLowerCase()
+  );
+
+  console.log('[onPaysChange] filtered reservations count:', this.reservations.length);
+}
+
 
   // ================== LOAD RESERVATIONS ==================
   loadAllReservations(): void {

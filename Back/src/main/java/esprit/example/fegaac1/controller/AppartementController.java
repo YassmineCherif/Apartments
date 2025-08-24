@@ -1,10 +1,19 @@
 package esprit.example.fegaac1.controller;
 
 import esprit.example.fegaac1.entities.*;
+import esprit.example.fegaac1.repository.AppartementRepository;
 import esprit.example.fegaac1.services.AppartementService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +23,7 @@ import java.util.Optional;
 public class AppartementController {
 
     private final AppartementService appartementService;
+    private final AppartementRepository appartementRepository;
 
     // ===================== PAYS =====================
     @GetMapping("/pays")
@@ -134,4 +144,50 @@ public class AppartementController {
     public void deleteAppartement(@PathVariable Long id) {
         appartementService.deleteAppartement(id);
     }
+
+
+    @PostMapping("/uploadImage")
+    public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file) {
+        try {
+            String uploadDir = "C:/Users/Yasoulanda/OneDrive/Desktop/Figeac/Front/src/assets/images/";
+            Path path = Paths.get(uploadDir + file.getOriginalFilename());
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+            return ResponseEntity.ok("File uploaded successfully");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading file");
+        }
+    }
+
+
+
+
+    @PostMapping("/appartements/upload")
+    public ResponseEntity<Appartement> addAppartementWithImage(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("titre") String titre,
+            @RequestParam("description") String description,
+            @RequestParam("id_bloc") Long id_bloc
+    ) {
+        try {
+            // 1️⃣ Save file
+            String uploadDir = "C:/Users/Yasoulanda/OneDrive/Desktop/Figeac/Front/src/assets/images/";
+            Path path = Paths.get(uploadDir + file.getOriginalFilename());
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+            // 2️⃣ Save Appartement
+            Appartement appartement = new Appartement();
+            appartement.setTitre(titre);
+            appartement.setDescription(description);
+            appartement.setId_bloc(id_bloc);
+            appartement.setImage("images/" + file.getOriginalFilename());
+
+            Appartement saved = appartementRepository.save(appartement);
+            return ResponseEntity.ok(saved);
+
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
 }

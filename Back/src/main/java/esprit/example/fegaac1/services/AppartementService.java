@@ -134,12 +134,16 @@ public class AppartementService implements IAppartementService {
 
     // ===================== APPARTEMENT =====================
     public Appartement addAppartement(Appartement appartement) {
-        // Check if title already exists
         if (appartementRepository.findByTitre(appartement.getTitre()).isPresent()) {
             throw new IllegalArgumentException("Appartement with this title already exists.");
         }
+        // ✅ Ensure image is not null
+        if (appartement.getImage() == null) {
+            appartement.setImage("");
+        }
         return appartementRepository.save(appartement);
     }
+
 
     public Appartement updateAppartement(Appartement appartement) {
         if (appartement.getId_app() == null) throw new IllegalArgumentException("Appartement ID cannot be null");

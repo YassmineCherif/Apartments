@@ -64,6 +64,15 @@
               <option *ngFor="let b of blocsList" [value]="b.id_bloc">{{ b.nom }}</option>
             </select>
           </div>
+
+<div class="mb-3">
+  <label class="form-label">Image</label>
+  <input type="file" class="form-control" (change)="onImageSelected($event)" />
+  <small class="text-muted">The image will be stored in assets/images</small>
+</div>
+
+
+
         </form>
       </div>
       <div class="modal-footer">

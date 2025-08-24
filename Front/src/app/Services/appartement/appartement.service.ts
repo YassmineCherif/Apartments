@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Appartement } from 'src/app/models/appartement';
 
 @Injectable({
   providedIn: 'root'
@@ -107,4 +108,18 @@ export class AppartementService {
   deleteAppartement(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/appartements/${id}`);
   }
+
+
+uploadImage(fileData: FormData) {
+  return this.http.post(`${this.baseUrl}/uploadImage`, fileData);
+}
+
+
+
+addAppartementWithImage(formData: FormData) {
+  return this.http.post<Appartement>(`${this.baseUrl}/appartements/upload`, formData);
+}
+
+
+
 }

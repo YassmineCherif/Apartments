@@ -1,4 +1,5 @@
 import { Appartement } from "./appartement";
+import { User } from "./user";
 
 export interface Reservation {
   id_reservation?: number;
@@ -13,5 +14,5 @@ export interface Reservation {
   residenceNom?: string;
   paysNom?: string;
 
-  
+  user?: User;
 } 
