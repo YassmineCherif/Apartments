@@ -1,20 +1,39 @@
 <div class="container mt-3">
   <h3 class="page-title text-center mb-4">Appartements Management</h3>
 
-  <!-- Bloc selection + search + add button -->
+  <!-- Filter row: Pays, Residence, Bloc -->
   <div class="row mb-3 align-items-center">
+    <!-- Pays Dropdown -->
     <div class="col-md-4">
-      <select class="form-select" [(ngModel)]="selectedBlocId" (change)="onBlocChange()">
-        <option [ngValue]="undefined" disabled>-- Select Bloc --</option>
-        <option *ngFor="let b of blocsList" [value]="b.id_bloc">{{ b.nom }}</option>
+      <select class="form-select" [(ngModel)]="selectedPaysId" (change)="onPaysChange()">
+        <option [ngValue]="undefined">-- Select Pays --</option>
+        <option *ngFor="let p of paysList" [ngValue]="p.id_country">{{ p.pays }}</option>
       </select>
     </div>
 
-    <div class="col-md-4">
+    <!-- Residence Dropdown -->
+    <div class="col-md-4" *ngIf="selectedPaysId">
+      <select class="form-select" [(ngModel)]="selectedResidenceId" (change)="onResidenceChange()">
+        <option [ngValue]="undefined">-- Select Residence --</option>
+        <option *ngFor="let r of filteredResidences" [ngValue]="r.id_residence">{{ r.nom }}</option>
+      </select>
+    </div>
+
+    <!-- Bloc Dropdown -->
+    <div class="col-md-4" *ngIf="selectedResidenceId">
+      <select class="form-select" [(ngModel)]="selectedBlocId" (change)="onBlocChange()">
+        <option [ngValue]="undefined">-- Select Bloc --</option>
+        <option *ngFor="let b of filteredBlocs" [ngValue]="b.id_bloc">{{ b.nom }}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Search + Add button -->
+  <div class="row mb-3 align-items-center">
+    <div class="col-md-8">
       <input type="text" class="form-control" placeholder="Search by title or description"
              [(ngModel)]="searchTerm" (input)="filterAppartements()" />
     </div>
-
     <div class="col-md-4 text-end">
       <button class="btn btn-success" (click)="openCreateModal()">Add Appartement</button>
     </div>
@@ -24,10 +43,12 @@
   <div class="row">
     <div *ngFor="let app of filteredAppartements" class="col-md-4 mb-3">
       <div class="card h-100 shadow-sm">
+        <img [src]="app.image ? '/assets/' + app.image : '/assets/images/app1.png'" 
+             class="card-img-top" alt="{{ app.titre }}">
         <div class="card-body">
           <h5 class="card-title">{{ app.titre }}</h5>
           <p class="card-text">
-            {{ app.description }} <br />
+            {{ app.description }} <br>
             Bloc: {{ getBlocName(app.id_bloc) }}
           </p>
         </div>
@@ -40,9 +61,9 @@
   </div>
 </div>
 
-<!-- Create/Update Modal -->
+<!-- Create/Edit Modal -->
 <div class="modal fade" id="appartementModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog" style="margin-top: 250px;">
+  <div class="modal-dialog" style="margin-top: 150px;">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">{{ appartementToUpdate?.id_app ? 'Edit Appartement' : 'Create Appartement' }}</h5>
@@ -61,18 +82,15 @@
           <div class="mb-3">
             <label class="form-label">Bloc</label>
             <select class="form-select" [(ngModel)]="appartementToUpdate.id_bloc" name="id_bloc" required>
-              <option *ngFor="let b of blocsList" [value]="b.id_bloc">{{ b.nom }}</option>
+              <option [ngValue]="undefined">-- Select Bloc --</option>
+              <option *ngFor="let b of blocsList" [ngValue]="b.id_bloc">{{ b.nom }}</option>
             </select>
           </div>
-
-<div class="mb-3">
-  <label class="form-label">Image</label>
-  <input type="file" class="form-control" (change)="onImageSelected($event)" />
-  <small class="text-muted">The image will be stored in assets/images</small>
-</div>
-
-
-
+          <div class="mb-3">
+            <label class="form-label">Image</label>
+            <input type="file" class="form-control" (change)="onImageSelected($event)" />
+            <small class="text-muted">The image will be stored in assets/images</small>
+          </div>
         </form>
       </div>
       <div class="modal-footer">

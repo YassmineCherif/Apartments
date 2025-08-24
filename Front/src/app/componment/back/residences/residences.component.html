@@ -5,8 +5,8 @@
       <div class="row mb-3 align-items-center">
 <div class="col-md-4">
   <select class="form-select" [(ngModel)]="selectedPaysId" (change)="onPaysChange()">
-    <option [ngValue]="undefined" disabled>-- Select Pays --</option>
-    <option *ngFor="let p of paysList" [ngValue]="p.id_country">{{ p.pays }}</option>
+    <option [ngValue]="undefined">-- Select Pays --</option> 
+    <option *ngFor="let p of paysList" [value]="p.id_country">{{ p.pays }}</option>
   </select>
 </div>
 

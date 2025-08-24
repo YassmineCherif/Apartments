@@ -1,26 +1,34 @@
 <div class="container mt-3"> 
   <h3 class="page-title text-center mb-4">Blocs Management</h3>
 
-  <!-- Residence selection + search + add button -->
-  <div class="row mb-3 align-items-center">
-    <div class="col-md-4">
-      <select class="form-select" [(ngModel)]="selectedResidenceId" (change)="onResidenceChange()">
-        <option [ngValue]="undefined" disabled>-- Select Residence --</option>
-        <option *ngFor="let r of residencesList" [value]="r.id_residence">{{ r.nom }}</option>
-      </select>
-    </div>
- 
+  <!-- Residence selection row -->
+<div class="row mb-3 align-items-center">
+<div class="col-md-4">
+  <select class="form-select" [(ngModel)]="selectedPaysId" (change)="onPaysChange()">
+    <option [ngValue]="undefined">-- Select Pays --</option> 
+    <option *ngFor="let p of paysList" [value]="p.id_country">{{ p.pays }}</option>
+  </select>
+</div>
 
-
-    <div class="col-md-4">
-      <input type="text" class="form-control" placeholder="Search by name"
-             [(ngModel)]="searchTerm" (input)="filterBlocs()" />
-    </div>
-
-    <div class="col-md-4 text-end">
-      <button class="btn btn-success" (click)="openCreateModal()">Add Bloc</button>
-    </div>
+  <div class="col-md-4" *ngIf="selectedPaysId">
+    <select class="form-select" [(ngModel)]="selectedResidenceId" (change)="onResidenceChange()">
+      <option [ngValue]="undefined" disabled>-- Select Residence --</option>
+      <option *ngFor="let r of residencesList" [value]="r.id_residence">{{ r.nom }}</option>
+    </select>
   </div>
+</div>
+
+<!-- Search + Add button row -->
+<div class="row mb-3 align-items-center">
+  <div class="col-md-4">
+    <input type="text" class="form-control" placeholder="Search by name"
+           [(ngModel)]="searchTerm" (input)="filterBlocs()" />
+  </div>
+
+  <div class="col-md-4 text-end">
+    <button class="btn btn-success" (click)="openCreateModal()">Add Bloc</button>
+  </div>
+</div>
 
   <!-- Bloc cards -->
   <div class="row">

@@ -50,6 +50,7 @@ onPaysChange(): void {
   }
 }
 
+
 getPaysName(id?: number): string {
   const pays = this.paysList.find(p => p.id_country === id);
   return pays ? pays.pays : 'N/A';
@@ -136,11 +137,22 @@ refreshData() {
     modal.show();
   }
 
+
+  
   openCreateModal() {
-    this.residenceToUpdate = { id_residence: undefined, nom: '', nombrebloc: 0, blocs: [] };
-    const modal = new bootstrap.Modal(document.getElementById('residenceModal')!);
-    modal.show();
-  }
+  this.residenceToUpdate = { 
+    id_residence: undefined, 
+    nom: '', 
+    nombrebloc: 0, 
+    blocs: [],
+    id_pays: this.selectedPaysId // default to selected pays
+  };
+  const modal = new bootstrap.Modal(document.getElementById('residenceModal')!);
+  modal.show();
+}
+
+
+
 
   closeModal() {
     const modalEl = document.getElementById('residenceModal');
