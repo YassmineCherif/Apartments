@@ -29,5 +29,4 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findApprovedReservationsByUser(@Param("userId") Long userId);
 
 
-
 }

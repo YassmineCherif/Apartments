@@ -89,14 +89,8 @@ getAllReservations(): Observable<Reservation[]> {
   return this.http.get<Reservation[]>(`${this.apiUrl}/all`);
 }
 
-
-getReservationsByCountry(country: string): Observable<any[]> {
-  if (country === 'all') {
-    return this.http.get<any[]>(`${this.apiUrl}/reservations`); // returns all
-  } else {
-    return this.http.get<any[]>(`${this.apiUrl}/reservations/country/${country}`);
-  }
-}
  
+ 
+
  }
 

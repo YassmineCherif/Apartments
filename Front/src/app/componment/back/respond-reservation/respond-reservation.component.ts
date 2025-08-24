@@ -25,7 +25,8 @@ export class RespondReservationComponent implements OnInit {
   selectedAppartementId?: number;
 
   reservations: Reservation[] = [];
-allReservations: Reservation[] = []; 
+  allReservations: Reservation[] = [];
+
   constructor(
     private reservationService: ReservationService,
     private appartementService: AppartementService
@@ -36,39 +37,126 @@ allReservations: Reservation[] = [];
     this.loadAllReservations();
   }
 
-  // ================== FETCH FILTER DATA ==================
+  // ---------- Utility: normalize strings ----------
+  private normalize(val?: string | null): string {
+    return (val ?? '')
+      .trim()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, ''); // remove accents
+  }
+
+  // ================== LOAD COUNTRIES ==================
   loadPays(): void {
-    this.appartementService.getAllPays().subscribe(data => this.paysList = data);
+    this.appartementService.getAllPays().subscribe(data => {
+      this.paysList = data;
+      console.log('[Pays] loaded:', this.paysList);
+    });
   }
 
+  // ================== HANDLE COUNTRY CHANGE ==================
+  onPaysChange(): void {
+    if (!this.selectedPaysId) {
+      console.log('[onPaysChange] No country selected -> clearing reservations');
+      this.reservations = [];
+      return;
+    }
 
+    const selectedPays = this.paysList.find(p => p.id_country === this.selectedPaysId)?.pays;
+    console.log('SelectedPaysId =', this.selectedPaysId, '| SelectedPays =', selectedPays);
 
-onPaysChange(): void {
-  if (!this.selectedPaysId) {
-    this.residencesList = [];
-    this.blocsList = [];
-    this.appartementsList = [];
-    this.reservations = [];   // clear reservations if nothing is selected
-    return;
+    // Debug: check matches
+    console.table(this.allReservations.map(r => ({
+      id: r.id_reservation,
+      paysNom: r.paysNom,
+      matchNormalized: this.normalize(r.paysNom) === this.normalize(selectedPays ?? '')
+    })));
+
+    // Filter reservations locally using normalized strings
+    this.reservations = this.allReservations.filter(
+      r => this.normalize(r.paysNom) === this.normalize(selectedPays ?? '')
+    );
+
+    console.log('[onPaysChange] filtered reservations count:', this.reservations.length);
   }
 
-  this.appartementService.getResidencesByPays(this.selectedPaysId).subscribe({
-    next: data => { 
-      this.residencesList = data;
-      this.blocsList = [];
-      this.appartementsList = [];
-      this.selectedResidenceId = undefined;
-      this.selectedBlocId = undefined;
-      this.selectedAppartementId = undefined;
+  // ================== LOAD RESERVATIONS ==================
+  loadAllReservations(): void {
+    this.reservationService.getAllReservations().subscribe({
+      next: data => {
+        this.allReservations = data;
+        console.log('[Reservations] loaded:', this.allReservations);
+        this.enrichReservations(this.allReservations); // fill bloc/residence/pays names
+        this.reservations = [...this.allReservations]; // initially show all
+      },
+      error: () => console.error('Error loading reservations ❌')
+    });
+  }
 
-      // 👉 filter reservations when pays is selected
-      this.filterReservations();
-    },
-    error: () => console.error("Erreur lors du chargement des résidences ❌")
-  });
-}
+  // ================== ENRICH RESERVATIONS ==================
+  enrichReservations(resList: Reservation[]): void {
+    resList.forEach(r => {
+      if (r.appartements?.id_bloc) {
+        this.appartementService.getBlocById(r.appartements.id_bloc).subscribe(bloc => {
+          r.blocNom = bloc.nom;
+          if (bloc.id_residence) {
+            this.appartementService.getResidenceById(bloc.id_residence).subscribe(res => {
+              r.residenceNom = res.nom;
+              if (res.id_pays) {
+                this.appartementService.getPaysById(res.id_pays).subscribe(p => {
+                  r.paysNom = p.pays;
+                  console.log(`Reservation #${r.id_reservation} paysNom =`, r.paysNom);
 
+                  // Re-apply country filter if already selected
+                  if (this.selectedPaysId) this.onPaysChange();
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+  }
 
+  // ================== FILTER (Bloc/Residence/Pays) ==================
+  filterReservations(): void {
+    let filtered = [...this.allReservations];
+
+    if (this.selectedBlocId) {
+      filtered = filtered.filter(r => r.appartements?.id_bloc === this.selectedBlocId);
+    }
+
+    if (this.selectedResidenceId) {
+      const selectedRes = this.residencesList.find(res => res.id_residence === this.selectedResidenceId)?.nom;
+      filtered = filtered.filter(r => r.residenceNom === selectedRes);
+    }
+
+    if (this.selectedPaysId) {
+      const selectedPays = this.paysList.find(p => p.id_country === this.selectedPaysId)?.pays;
+      filtered = filtered.filter(r => this.normalize(r.paysNom) === this.normalize(selectedPays ?? ''));
+    }
+
+    this.reservations = filtered;
+    console.log('[filterReservations] result count:', this.reservations.length);
+  }
+
+  // ================== RESPOND TO RESERVATION ==================
+  acceptReservation(reservation: Reservation): void {
+    this.updateApproval(reservation, 1);
+  }
+
+  declineReservation(reservation: Reservation): void {
+    this.updateApproval(reservation, 0);
+  }
+
+  updateApproval(reservation: Reservation, status: number): void {
+    this.reservationService.updateReservationApproval(reservation.id_reservation!, status).subscribe({
+      next: () => reservation.approved = status,
+      error: () => console.error('Error updating reservation ❌')
+    });
+  }
+
+  // ================== RESIDENCE / BLOC CHANGE ==================
   onResidenceChange(): void {
     if (!this.selectedResidenceId) {
       this.blocsList = [];
@@ -84,85 +172,5 @@ onPaysChange(): void {
 
   onBlocChange(): void {
     this.filterReservations();
-  }
-
- 
-
-  // ================== LOAD RESERVATIONS ==================
-loadAllReservations(): void {
-  this.reservationService.getAllReservations().subscribe({
-    next: data => {
-      this.allReservations = data;   // keep original
-      this.enrichReservations(this.allReservations); // enrich ALL reservations
-      this.reservations = [...this.allReservations]; // show all initially
-    },
-    error: () => console.error("Erreur lors du chargement des réservations ❌")
-  });
-}
-
-// ================== ENRICH RESERVATIONS ==================
-enrichReservations(resList: Reservation[]): void {
-  resList.forEach(r => {
-    if (r.appartements?.id_bloc) {
-      this.appartementService.getBlocById(r.appartements.id_bloc).subscribe(bloc => {
-        r.blocNom = bloc.nom;
-
-        if (bloc.id_residence) {
-          this.appartementService.getResidenceById(bloc.id_residence).subscribe(res => {
-            r.residenceNom = res.nom;
-
-            if (res.id_pays) {
-              this.appartementService.getPaysById(res.id_pays).subscribe(p => {
-                r.paysNom = p.pays;
-
-                // 👉 reapply filter after enrichment
-                this.filterReservations();
-              });
-            }
-          });
-        }
-      });
-    }
-  });
-}
-
-// ================== FILTER ==================
-filterReservations(): void {
-  let filtered = [...this.allReservations];
-
-  if (this.selectedBlocId) {
-    filtered = filtered.filter(r => r.appartements?.id_bloc === this.selectedBlocId);
-  }
-
-  if (this.selectedResidenceId) {
-    const selectedRes = this.residencesList.find(res => res.id_residence === this.selectedResidenceId)?.nom;
-    filtered = filtered.filter(r => r.residenceNom === selectedRes);
-  }
-
-  if (this.selectedPaysId) {
-    const selectedPays = this.paysList.find(p => p.id_country === this.selectedPaysId)?.pays;
-    filtered = filtered.filter(r => r.paysNom === selectedPays);
-  }
-
-  this.reservations = filtered;
-}
-
-
-  // ================== RESPOND TO RESERVATION ==================
-  acceptReservation(reservation: Reservation): void {
-    this.updateApproval(reservation, 1); // approve
-  }
-
-  declineReservation(reservation: Reservation): void {
-    this.updateApproval(reservation, 0); // decline
-  }
-
-  updateApproval(reservation: Reservation, status: number): void {
-    this.reservationService.updateReservationApproval(reservation.id_reservation!, status).subscribe({
-      next: () => {
-        reservation.approved = status;
-      },
-      error: () => console.error("Erreur lors de la mise à jour de la réservation ❌")
-    });
   }
 }

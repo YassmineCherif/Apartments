@@ -2,13 +2,17 @@
   <h3 class="page-title text-center mb-4">Gestion des Réservations</h3>
 
   <!-- Filters -->
-    <div class="form-row mb-3">
+<div class="form-row mb-3">
   <label class="form-label">Choisir un Pays</label>
-  <select class="form-select" [(ngModel)]="selectedPaysId" (change)="onPaysChange()">
-    <option [ngValue]="undefined" disabled>-- Sélectionner un pays --</option>
-    <option *ngFor="let pays of paysList" [value]="pays.id_country">{{ pays.pays }}</option>
-  </select>
+<select class="form-select" [(ngModel)]="selectedPaysId" (change)="onPaysChange()">
+  <option [ngValue]="undefined" disabled>-- Sélectionner un pays --</option>
+  <option *ngFor="let pays of paysList" [ngValue]="pays.id_country">{{ pays.pays }}</option>
+</select>
+
+
+
 </div>
+
 
 
 
